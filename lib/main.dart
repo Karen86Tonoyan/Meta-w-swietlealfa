@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/alfa_bridge.dart';
+import 'core/cerber.dart';
 import 'services/bot_engine.dart';
 import 'ui/home_screen.dart';
 
@@ -10,6 +11,8 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => AlfaBridge()),
         ChangeNotifierProvider(create: (_) => BotEngine()),
+        // CERBER: mały bot stróżujący — patrol przy starcie aplikacji
+        ChangeNotifierProvider(create: (_) => CerberGuard()..patrol()),
       ],
       child: const AlfaMetaApp(),
     ),

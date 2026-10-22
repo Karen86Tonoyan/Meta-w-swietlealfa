@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/alfa_bridge.dart';
+import '../core/cerber.dart';
 import 'transcription_screen.dart';
 import 'camera_screen.dart';
 import 'bots_screen.dart';
+import 'cerber_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final bridge = context.watch<AlfaBridge>();
+    final cerber = context.watch<CerberGuard>();
     final statusText = switch (bridge.state) {
       BridgeState.connected => 'ALFA Bridge: połączono',
       BridgeState.connecting => 'Łączenie…',
@@ -28,8 +31,23 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('ALFA × Meta'),
         actions: [
+          // Mini-wskaźnik CERBER-a w pasku
+          Icon(
+            switch (cerber.state) {
+              CerberState.alarm => Icons.warning,
+              CerberState.guarding => Icons.shield,
+              _ => Icons.shield_outlined,
+            },
+            color: switch (cerber.state) {
+              CerberState.alarm => Colors.red,
+              CerberState.guarding => Colors.green,
+              _ => Colors.grey,
+            },
+            size: 18,
+          ),
+          const SizedBox(width: 8),
           Padding(
-            padding: const EdgeInsets.only(right: 12),
+            padding: const EdgeInsets.only(right: 4),
             child: Center(child: Text(statusText, style: const TextStyle(fontSize: 12))),
           ),
           IconButton(
@@ -40,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: IndexedStack(
         index: _tab,
-        children: const [TranscriptionScreen(), CameraScreen(), BotsScreen()],
+        children: const [TranscriptionScreen(), CameraScreen(), BotsScreen(), CerberScreen()],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tab,
@@ -49,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
           NavigationDestination(icon: Icon(Icons.mic), label: 'Głos'),
           NavigationDestination(icon: Icon(Icons.camera_alt), label: 'Wzrok'),
           NavigationDestination(icon: Icon(Icons.smart_toy), label: 'Boty ALFA'),
+          NavigationDestination(icon: Icon(Icons.pets), label: 'Cerber'),
         ],
       ),
     );
