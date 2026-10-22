@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/alfa_bridge.dart';
 import 'core/cerber.dart';
+import 'core/secure_store.dart';
 import 'services/bot_engine.dart';
 import 'ui/home_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Klucze z secure storage (Keychain/Keystore), nie z dart-define.
+  await SecureStore.hydrate();
   runApp(
     MultiProvider(
       providers: [
