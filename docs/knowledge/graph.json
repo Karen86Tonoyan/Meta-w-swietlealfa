@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "ALFA × Meta — graf wiedzy",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "owner": "Karen86Tonoyan",
     "updated": "2026-10-23"
   },
@@ -41,7 +41,11 @@
     {"id": "ip", "type": "signal", "label": "Publiczne IP"},
     {"id": "device_fp", "type": "signal", "label": "Fingerprint urządzenia"},
     {"id": "token", "type": "signal", "label": "Token API"},
-    {"id": "empty_array", "type": "protocol", "label": "[]", "desc": "Odpowiedź ratunkowa przy anomalii krytycznej; fail-closed"}
+    {"id": "empty_array", "type": "protocol", "label": "[]", "desc": "Odpowiedź ratunkowa przy anomalii krytycznej; fail-closed"},
+
+    {"id": "plan_guard", "type": "module", "label": "PlanGuard", "desc": "CERBER waliduje plan człowieka (całość) i kroki agenta (pojedynczo, przed wykonaniem)"},
+    {"id": "agent_steps", "type": "entity", "label": "Kroki agenta", "desc": "Pojedyncze akcje agenta: read/write/run/send/network/delete"},
+    {"id": "human_plan", "type": "entity", "label": "Plan człowieka", "desc": "Zatwierdzany plan; agent może odbiegać — każdy krok walidowany niezależnie"}
   ],
   "edges": [
     {"from": "cerber_bot", "to": "profile", "rel": "pilnuje"},
@@ -82,6 +86,12 @@
     {"from": "accounts_center", "to": "meta_api", "rel": "łączy_tożsamość"},
     {"from": "alfa", "to": "cerber", "rel": "zawiera"},
     {"from": "alfa", "to": "brain", "rel": "zawiera"},
-    {"from": "alfa", "to": "guardian", "rel": "zawiera"}
+    {"from": "alfa", "to": "guardian", "rel": "zawiera"},
+
+    {"from": "plan_guard", "to": "human_plan", "rel": "waliduje_całość_przed_startem"},
+    {"from": "plan_guard", "to": "agent_steps", "rel": "waliduje_pojedynczo_przed_wykonaniem"},
+    {"from": "plan_guard", "to": "cerber", "rel": "jest_częścią"},
+    {"from": "plan_guard", "to": "empty_array", "rel": "przy_odmowie_krytycznej_odpowiada"},
+    {"from": "cerber_bot", "to": "plan_guard", "rel": "dostarcza_kontekst_patrolu"}
   ]
 }
