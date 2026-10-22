@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "name": "ALFA × Meta — graf wiedzy",
+    "version": "0.1.0",
+    "owner": "Karen86Tonoyan",
+    "updated": "2026-10-23"
+  },
+  "nodes": [
+    {"id": "alfa", "type": "system", "label": "ALFA", "desc": "Ekosystem: marketplace silników, filozofia rytuału i deterministyczności"},
+    {"id": "cerber", "type": "module", "label": "CERBER", "desc": "Warstwa bezpieczeństwa; protokół ratunkowy: []"},
+    {"id": "cerber_bot", "type": "agent", "label": "Mały Cerber", "desc": "Bot stróżujący per profil: patrol IP / urządzenie / token"},
+    {"id": "guardian", "type": "module", "label": "Guardian", "desc": "Filtry wejścia/wyjścia, pre-filter klienta, Guardian v2 Temporal Partition Engine"},
+    {"id": "brain", "type": "module", "label": "ALFA Brain", "desc": "Pamięć kontekstowa: TDCM, Temporal RAG, Oracle"},
+    {"id": "bridge", "type": "module", "label": "ALFA Bridge", "desc": "Hub WebSocket ws://:8080/bridge łączący klientów z Brain"},
+    {"id": "oracle", "type": "module", "label": "Oracle", "desc": "Korpus wiedzy (docs/knowledge), graf wiedzy"},
+
+    {"id": "bot_coder", "type": "bot", "label": "ALFA_CODER_01", "ritual": "Rytuał Kodu"},
+    {"id": "bot_architect", "type": "bot", "label": "ALFA_ARCHITECT", "ritual": "Rytuał Struktury"},
+    {"id": "bot_debugger", "type": "bot", "label": "ALFA_DEBUGGER", "ritual": "Rytuał Tropu"},
+    {"id": "bot_tester", "type": "bot", "label": "ALFA_TESTER", "ritual": "Rytuał Próby"},
+    {"id": "bot_doc", "type": "bot", "label": "ALFA_DOC_GENERATOR", "ritual": "Rytuał Zapisu"},
+    {"id": "bot_prompt", "type": "bot", "label": "ALFA_PROMPT_MASTER", "ritual": "Rytuał Słowa"},
+
+    {"id": "glasses", "type": "device", "label": "Ray-Ban Meta", "desc": "Okulary: mikrofon, kamera, przyciski; BLE do telefonu"},
+    {"id": "phone", "type": "device", "label": "Android/iOS", "desc": "Host aplikacji Flutter + Meta Wearables SDK"},
+    {"id": "windows", "type": "device", "label": "Windows", "desc": "Klient Bridge, bez parowania z okularami"},
+
+    {"id": "muse_vt", "type": "model", "label": "muse-voice-transcribe-1.0", "desc": "STT realtime: diaryzacja, VAD, keyword biasing, 25 języków"},
+    {"id": "muse_spark", "type": "model", "label": "muse-spark-1.3", "desc": "Agentic/coding, kontekst 1M, standard dla botów"},
+    {"id": "muse_wonder", "type": "model", "label": "muse-wonder-1.0", "desc": "Długie zadania agentowe, multi-file coding"},
+    {"id": "muse_glimmer", "type": "model", "label": "Muse Glimmer", "desc": "Open-weight, self-host fallback (vLLM/llama.cpp)"},
+    {"id": "sam", "type": "model", "label": "sam-3.1", "desc": "Segmentacja obrazu/wideo — 'co widzę'"},
+
+    {"id": "meta_api", "type": "service", "label": "Meta Model API", "desc": "api.meta.ai/v1, klucz MODEL_API_KEY serwerowo"},
+    {"id": "wearables_sdk", "type": "service", "label": "Meta Wearables SDK", "desc": "Parowanie i strumienie z okularów; wymaga zatwierdzenia"},
+    {"id": "accounts_center", "type": "service", "label": "Meta Accounts Center", "desc": "Tożsamość: IG/FB/okulary/API"},
+    {"id": "instagram", "type": "service", "label": "Instagram", "desc": "Profil publiczny projektu; konto firmowe → Graph API"},
+
+    {"id": "profile", "type": "entity", "label": "Profil użytkownika", "desc": "Jednostka chroniona; każdy profil ma swojego Cerbera"},
+    {"id": "baseline", "type": "entity", "label": "Baseline zaufania", "desc": "Zaufany stan: IP + fingerprint + format tokenu"},
+    {"id": "ip", "type": "signal", "label": "Publiczne IP"},
+    {"id": "device_fp", "type": "signal", "label": "Fingerprint urządzenia"},
+    {"id": "token", "type": "signal", "label": "Token API"},
+    {"id": "empty_array", "type": "protocol", "label": "[]", "desc": "Odpowiedź ratunkowa przy anomalii krytycznej; fail-closed"}
+  ],
+  "edges": [
+    {"from": "cerber_bot", "to": "profile", "rel": "pilnuje"},
+    {"from": "cerber_bot", "to": "ip", "rel": "sprawdza"},
+    {"from": "cerber_bot", "to": "device_fp", "rel": "sprawdza"},
+    {"from": "cerber_bot", "to": "token", "rel": "sprawdza"},
+    {"from": "ip", "to": "baseline", "rel": "porównywane_z"},
+    {"from": "device_fp", "to": "baseline", "rel": "porównywane_z"},
+    {"from": "cerber_bot", "to": "empty_array", "rel": "przy_anomalii_krytycznej_odpowiada"},
+    {"from": "cerber_bot", "to": "cerber", "rel": "raportuje_do"},
+    {"from": "guardian", "to": "cerber", "rel": "jest_częścią"},
+    {"from": "bridge", "to": "brain", "rel": "łączy_z"},
+    {"from": "bridge", "to": "cerber", "rel": "filtruje_przez"},
+    {"from": "oracle", "to": "brain", "rel": "zasilany_przez"},
+
+    {"from": "glasses", "to": "phone", "rel": "paruje_się_przez_BLE"},
+    {"from": "phone", "to": "wearables_sdk", "rel": "używa"},
+    {"from": "glasses", "to": "muse_vt", "rel": "strumieniuje_audio_do"},
+    {"from": "muse_vt", "to": "bridge", "rel": "transkrypcja_trafia_do"},
+    {"from": "windows", "to": "bridge", "rel": "klient_WebSocket"},
+
+    {"from": "bot_coder", "to": "muse_spark", "rel": "odpowiada_przez"},
+    {"from": "bot_architect", "to": "muse_spark", "rel": "odpowiada_przez"},
+    {"from": "bot_debugger", "to": "muse_spark", "rel": "odpowiada_przez"},
+    {"from": "bot_tester", "to": "muse_spark", "rel": "odpowiada_przez"},
+    {"from": "bot_doc", "to": "muse_spark", "rel": "odpowiada_przez"},
+    {"from": "bot_prompt", "to": "muse_spark", "rel": "odpowiada_przez"},
+    {"from": "muse_spark", "to": "muse_glimmer", "rel": "fallback_lokalny"},
+    {"from": "muse_wonder", "to": "muse_spark", "rel": "heavy_alternatywa"},
+    {"from": "glasses", "to": "sam", "rel": "klatki_do_segmentacji"},
+
+    {"from": "meta_api", "to": "muse_vt", "rel": "hostuje"},
+    {"from": "meta_api", "to": "muse_spark", "rel": "hostuje"},
+    {"from": "meta_api", "to": "muse_wonder", "rel": "hostuje"},
+    {"from": "meta_api", "to": "sam", "rel": "hostuje"},
+    {"from": "accounts_center", "to": "instagram", "rel": "łączy_tożsamość"},
+    {"from": "accounts_center", "to": "glasses", "rel": "łączy_tożsamość"},
+    {"from": "accounts_center", "to": "meta_api", "rel": "łączy_tożsamość"},
+    {"from": "alfa", "to": "cerber", "rel": "zawiera"},
+    {"from": "alfa", "to": "brain", "rel": "zawiera"},
+    {"from": "alfa", "to": "guardian", "rel": "zawiera"}
+  ]
+}
