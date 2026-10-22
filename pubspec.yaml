@@ -1,7 +1,7 @@
 name: alfa_meta_glasses
-description: "Meta w świetle ALFA — okulary Ray-Ban Meta + ALFA Bridge + boty ALFA (Android / iOS / Windows)"
+description: "Meta w świetle ALFA — okulary Ray-Ban Meta + Muse API + ALFA Bridge + boty ALFA (Android / iOS / Windows)"
 publish_to: 'none'
-version: 0.1.0
+version: 0.2.0
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   web_socket_channel: ^3.0.1
+  http: ^1.2.1
   provider: ^6.1.2
   permission_handler: ^11.3.1
   shared_preferences: ^2.2.3
